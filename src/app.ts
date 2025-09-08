@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { usersRoutes } from "./Routes/user.route";
 import { tableRoutes } from "./Routes/table.route";
+import { categoryRoutes } from "./Routes/category.route";
+import fileUpload from "./middlewares/file-handler";
 // import { usersRoutes } from "./routes/users.routes";
 // import fileUpload from "./middlewares/file-handler";
 // import { tasksRoutes } from "./routes/tasks.routes";
@@ -47,20 +49,11 @@ app.use(
   })
 );
 
-// app.use(fileUpload);
-// app.use("/api/tasks", tasksRoutes);
-// app.use("/api/users", usersRoutes);
-// app.use("/api/pos-categories", categoriesRoutes);
-// app.use("/api/pos-products", productsRoutes);
-// app.use("/api/pos-cashiers", cashiersRoutes);
-// app.use("/api/pos-bakery-orders", bakeryOrders);
-// app.use("/api/pos-login", loginRoutes);
-// app.use("/api/pos-item-types", itemTypesRouter);
-// app.use("/api/pos-stuart-orders",stuartOrdersRoutes);
-// app.use("/api/pos-tables", tablesRoutes);
-// app.use("/api/pos-kot", kotRoutes);
+app.use(fileUpload);
+
 app.use("/api/users", usersRoutes);
 app.use("/api/tables", tableRoutes);
+app.use("/api/categories", categoryRoutes);
 
 const MONGO_URI = process.env.MONGO_URI || "";
 console.log("MONGO_URI:", MONGO_URI);
