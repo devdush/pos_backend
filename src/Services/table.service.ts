@@ -30,4 +30,60 @@ export class TableService {
       return { success: false, message: "Failed to fetch tables", error };
     }
   }
+  static async getTableById(id: string) {
+    try {
+      const table = await Table.findById(id);
+      if (!table) {
+        return { success: false, message: "Table not found" };
+      }
+      return { success: true, table };
+    } catch (error) {
+      console.error("Error fetching table:", error);
+      return { success: false, message: "Failed to fetch table", error };
+    }
+  }
+  static async updateTableStatus(id: string, status: string) {
+    try {
+      const table = await Table.findByIdAndUpdate(
+        id,
+        { status, occupiedAt: status === "Occupied" ? new Date() : null },
+        { new: true }
+      );
+      if (!table) {
+        return { success: false, message: "Table not found" };
+      }
+      return {
+        success: true,
+        table,
+        message: "Table status updated successfully",
+      };
+    } catch (error) {
+      console.error("Error updating table status:", error);
+      return {
+        success: false,
+        message: "Failed to update table status",
+        error,
+      };
+    }
+  }
+  static async deleteTable(id: string) {
+    try {
+      const table = await Table.findByIdAndDelete(id);
+      if (!table) {
+        return { success: false, message: "Table not found" };
+      }
+      return {
+        success: true,
+        table,
+        message: "Table deleted successfully",
+      };
+    } catch (error) {
+      console.error("Error deleting table:", error);
+      return {
+        success: false,
+        message: "Failed to delete table",
+        error,
+      };
+    }
+  }
 }
