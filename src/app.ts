@@ -6,6 +6,7 @@ import { tableRoutes } from "./Routes/table.route";
 import { categoryRoutes } from "./Routes/category.route";
 import fileUpload from "./middlewares/file-handler";
 import { itemRoutes } from "./Routes/item.route";
+import { stuartRequestRoutes } from "./Routes/stuartRequest.route";
 // import { usersRoutes } from "./routes/users.routes";
 // import fileUpload from "./middlewares/file-handler";
 // import { tasksRoutes } from "./routes/tasks.routes";
@@ -56,6 +57,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/tables", tableRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/stuartRequests", stuartRequestRoutes);
 
 const MONGO_URI = process.env.MONGO_URI || "";
 console.log("MONGO_URI:", MONGO_URI);
