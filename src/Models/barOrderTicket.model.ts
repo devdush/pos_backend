@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-interface IKitchenOrderTicket extends Document {
+interface IBarOrderTicket extends Document {
   tableId: Types.ObjectId;
   stuartId: Types.ObjectId;
   stuartRequestId: Types.ObjectId;
@@ -10,7 +10,7 @@ interface IKitchenOrderTicket extends Document {
   }[];
   status: "pending" | "in-progress" | "completed";
 }
-const KitchenOrderTicketSchema = new Schema<IKitchenOrderTicket>(
+const BarOrderTicketSchema = new Schema<IBarOrderTicket>(
   {
     tableId: { type: Schema.Types.ObjectId, ref: "Table", required: true },
     stuartId: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -37,31 +37,31 @@ const KitchenOrderTicketSchema = new Schema<IKitchenOrderTicket>(
     toObject: { virtuals: true },
   }
 );
-KitchenOrderTicketSchema.virtual("productDetails", {
+BarOrderTicketSchema.virtual("productDetails", {
   ref: "Item",
   localField: "items.productId",
   foreignField: "_id",
   justOne: false,
 });
-KitchenOrderTicketSchema.virtual("tableInfo", {
+BarOrderTicketSchema.virtual("tableInfo", {
   ref: "Table",
   localField: "tableId",
   foreignField: "_id",
   justOne: true,
 });
-KitchenOrderTicketSchema.virtual("stuartInfo", {
+BarOrderTicketSchema.virtual("stuartInfo", {
   ref: "User",
   localField: "stuartId",
   foreignField: "_id",
   justOne: true,
 });
-KitchenOrderTicketSchema.virtual("stuartRequestInfo", {
+BarOrderTicketSchema.virtual("stuartRequestInfo", {
   ref: "StuartOrder",
   localField: "stuartRequestId",
   foreignField: "_id",
   justOne: true,
 });
-export const KitchenOrderTicket = model<IKitchenOrderTicket>(
-  "KitchenOrderTicket",
-  KitchenOrderTicketSchema
+export const BarOrderTicket = model<IBarOrderTicket>(
+  "BarOrderTicket",
+  BarOrderTicketSchema
 );
