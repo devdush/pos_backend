@@ -57,4 +57,43 @@ export class StuartRequestController {
         .json({ success: false, message: "Internal server error" });
     }
   }
+  static async deleteStuartRequest(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const result = await StuartRequestService.deleteStuartRequest(id);
+      if (!result.success) {
+        res.status(400).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    } catch (error) {
+      console.error("Error deleting Stuart request:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  }
+  static async getStuartRequestByTableIdAndStuartID(
+    req: Request,
+    res: Response
+  ) {
+    try {
+      const { stuartId, tableId } = req.body;
+      const result =
+        await StuartRequestService.getStuartRequestByTableIdAndStuartID(
+          stuartId,
+          tableId
+        );
+      if (!result.success) {
+        res.status(400).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    } catch (error) {
+      console.error("Error deleting Stuart request:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  }
 }

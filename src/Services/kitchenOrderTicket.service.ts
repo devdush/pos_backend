@@ -28,7 +28,9 @@ export class KitchenOrderTicketService {
         };
       }
     } catch (error) {
+      console.error("Error generating KOT:", error);
       return { success: false, message: "KOT generation failed", error };
+      
     }
   }
   static async getAllKOTs() {

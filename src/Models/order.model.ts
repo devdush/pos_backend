@@ -25,10 +25,18 @@ const OrderSchema = new Schema(
     stuartOrderId: {
       type: Schema.Types.ObjectId,
       ref: "StuartOrder",
-      required: true,
     },
     customerId: { type: Schema.Types.ObjectId, ref: "Customer" },
-
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Item",
+          required: true,
+        },
+        quantity: { type: Number, required: true, min: 1 },
+      },
+    ],
     kotIDs: [{ type: Schema.Types.ObjectId, ref: "KitchenOrderTicket" }],
     botIDs: [{ type: Schema.Types.ObjectId, ref: "BarOrderTicket" }],
 
@@ -60,11 +68,11 @@ OrderSchema.virtual("receivedMoney").get(function (this: any) {
 OrderSchema.virtual("balance").get(function (this: any) {
   return this.totalAmount - this.receivedMoney;
 });
-OrderSchema.virtual("productDetails", {
-  ref: "StuartOrder",
-  localField: "stuartOrderId",
+OrderSchema.virtual("ProductsInfo", {
+  ref: "Item",
+  localField: "items.productId",
   foreignField: "_id",
-  justOne: true,
+  justOne: false,
 });
 
 type IOrder = InferSchemaType<typeof OrderSchema> & {

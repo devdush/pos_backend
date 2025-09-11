@@ -20,6 +20,11 @@ export class StuartRequestService {
       if (!newRequest) {
         return { success: false, message: "Failed to create Stuart request" };
       }
+      await newRequest.populate([
+        // { path: "stuartId" },
+        // { path: "tableId" },
+        { path: "items.productId" },
+      ]);
       return {
         success: true,
         data: newRequest,
@@ -83,6 +88,44 @@ export class StuartRequestService {
       };
     } catch (error) {
       console.error("Error updating Stuart request:", error);
+      return { success: false, message: "Internal server error" };
+    }
+  }
+  static async deleteStuartRequest(orderId: string) {
+    try {
+      const result = await StuartOrder.findByIdAndDelete(orderId);
+      if (!result) {
+        return { success: false, message: "Stuart order not found" };
+      }
+      return { success: true, message: "Stuart order deleted successfully" };
+    } catch (error) {
+      console.error("Error deleting Stuart order:", error);
+      return { success: false, message: "Internal server error" };
+    }
+  }
+  static async getStuartRequestByTableIdAndStuartID(
+    stuartId: string,
+    tableId: string
+  ) {
+    try {
+      const result = await StuartOrder.findOne({
+        tableId,
+        stuartId,
+        status: "pending",
+      })
+        .select("items.quantity totalAmount") 
+        .populate({
+          path: "items.productId",
+          select: "itemName price",
+        });
+
+      if (!result) {
+        return { success: false, message: "No active order found" };
+      }
+
+      return { success: true, data: result };
+    } catch (error) {
+      console.error("Error fetching Stuart request:", error);
       return { success: false, message: "Internal server error" };
     }
   }

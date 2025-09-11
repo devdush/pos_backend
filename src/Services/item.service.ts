@@ -1,5 +1,9 @@
 import { Item } from "../Models/item.model";
 
+interface ICartItem {
+  productId: string;
+  quantity: number;
+}
 export class ItemService {
   static async createItem(
     itemName: string,
@@ -53,6 +57,33 @@ export class ItemService {
       return { success: true, data: item };
     } catch (error) {
       console.error("Error fetching item:", error);
+      return { success: false, message: "Internal server error" };
+    }
+  }
+  static async updateItemsAfterOrder(itemsSold: ICartItem[]) {
+    try {
+      if (!itemsSold || itemsSold.length === 0) {
+        return { success: false, message: "No items provided" };
+      }
+
+      // Prepare bulk update operations
+      const bulkOps = itemsSold.map((item) => ({
+        updateOne: {
+          filter: { _id: item.productId },
+          update: { $inc: { availableQuantity: -item.quantity } },
+        },
+      }));
+
+      // Execute all updates in a single DB call
+      const result = await Item.bulkWrite(bulkOps);
+
+      return {
+        success: true,
+        data: result,
+        message: "Items updated successfully",
+      };
+    } catch (error) {
+      console.error("Error updating items:", error);
       return { success: false, message: "Internal server error" };
     }
   }

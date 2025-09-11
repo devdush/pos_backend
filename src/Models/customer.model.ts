@@ -6,7 +6,7 @@ interface ICustomer extends Document {
 }
 
 const CustomerSchema = new Schema<ICustomer>({
-  name: { type: String, required: true },
+  name: { type: String },
   phone: { type: String, required: true },
 });
 

@@ -70,6 +70,7 @@ export class ItemController {
         .json({ success: false, message: "Internal server error" });
     }
   }
+
   static async deleteItem(req: Request, res: Response) {
     try {
       const { id } = req.params;
